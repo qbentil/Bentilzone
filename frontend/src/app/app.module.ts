@@ -21,13 +21,13 @@ import { ThankyouComponent } from './components/thankyou/thankyou.component';
     CheckoutComponent,
     HomeComponent,
     ProductComponent,
-    ThankyouComponent,
-    HttpClientModule
+    ThankyouComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
