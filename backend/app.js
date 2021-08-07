@@ -6,6 +6,11 @@ const logger = require('morgan');
 
 // Custom Dependencise
 const cors = require('cors');
+// const corsOptions ={
+//     origin:'http://localhost:3000', 
+//     credentials:true,            //access-control-allow-credentials:true
+//     optionSuccessStatus:200
+// }
 
 
 // Import routes
@@ -25,8 +30,11 @@ app.use('/api/orders', ordersRoute);
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT'],
-  allowedHeaders: 'COntent-Type, Authorization, Origin, X-Requested-with, Accept'
+  // allowedHeaders: 'Content-Type, Authorization, Origin, X-Requested-with, Accept',
+  allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept',
 }))
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
