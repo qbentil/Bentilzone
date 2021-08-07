@@ -8,7 +8,14 @@ const {database} = require('../config/helpers')
 
 /* GET ALL PRODUCTS */
 router.get('/', function(req, res){
-    
+  
+  // res.setHeader("Access-Control-Allow-Origin", "*")
+  // res.setHeader("Access-Control-Allow-Credentials", "true");
+  // res.setHeader("Access-Control-Max-Age", "1800");
+  // res.setHeader("Access-Control-Allow-Headers", "content-type");
+  // res.setHeader( "Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, PATCH, OPTIONS" ); 
+
+  
   let page = (req.query.page != undefined && req.query.page != 0) ? req.query.page: 1; // set current page number
   const limit = (req.query.page != undefined && req.query.page != 0) ? req.query.limit: 10; // set limit of items per page
 

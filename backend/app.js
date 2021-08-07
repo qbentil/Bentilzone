@@ -6,11 +6,14 @@ const logger = require('morgan');
 
 // Custom Dependencise
 const cors = require('cors');
-// const corsOptions ={
-//     origin:'http://localhost:3000', 
-//     credentials:true,            //access-control-allow-credentials:true
-//     optionSuccessStatus:200
-// }
+const corsOptions ={
+    origin: 'http://localhost:4200', 
+    credentials: true,            //access-control-allow-credentials:true
+    methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH'],
+    allowedHeaders: 'Content-Type, Authorization, Origin, X-Requested-with, Accept',
+    preflightContinue: false,
+    optionsSuccessStatus: 204
+}
 
 
 // Import routes
@@ -27,12 +30,13 @@ app.use('/api/users', usersRoute);
 app.use('/api/orders', ordersRoute);
 
 // Custom configuartion for CORS
-app.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT'],
-  // allowedHeaders: 'Content-Type, Authorization, Origin, X-Requested-with, Accept',
-  allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept',
-}))
+// app.use(cors({
+//   origin: '*',
+//   methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT'],
+//   allowedHeaders: 'Content-Type, Authorization, Origin, X-Requested-with, Accept',
+//   // allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept',
+// }))
+app.use(cors(corsOptions));
 
 
 
