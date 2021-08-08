@@ -10,14 +10,20 @@ import { ProductService } from './../../services/product.service';
 export class HomeComponent implements OnInit {
 
   products: any[] = [];
-  
+
   constructor(private productService: ProductService) { }
 
   ngOnInit(): void {
-    this.productService.getAllProducts().subscribe((prods) => {
-      // this.products = prods;
-      console.log(prods);
+    this.productService.getAllProducts().subscribe((prods: any) => {
+      this.products = prods.products;
+      // console.log(prods.products);
     });
+  }
+
+  selectProduct(id: Number)
+  {
+    console.log(id);
+
   }
 
 }
