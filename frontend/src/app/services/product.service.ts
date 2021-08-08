@@ -8,7 +8,7 @@ import { environment } from '../../environments/environment';
 export class ProductService {
 
   private SERVER_URL = environment.SERVER_URL;
-  
+
   constructor(private http: HttpClient) { }
 
   /* FETCDH ALL PRODUCTS FROM BACKEND */
