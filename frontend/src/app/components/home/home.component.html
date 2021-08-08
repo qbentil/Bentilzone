@@ -80,40 +80,48 @@
 					<div class="col-md-12">
 						<div class="row">
 							<div class="col-md-4 col-sm-6" *ngFor="let p of products">
-								<!-- <div class="card my-2">
-                  <div class="container justify-content-center align-items-center text-center" style="width: 200px; height: 200px;">
+								<div class="card my-2">
+                  <div class="container d-flex justify-content-center" style="width: 200px; height: 200px;">
                     <img src="/assets/img/products/{{p.image}}" alt="{{p.name}}" width="100%" class="card-img-top" (click)="selectProduct(p.id)" style="cursor: pointer;">
                   </div>
                   <div class="card-header">
                     <div class="card-title text-center">
                       <p>{{p.name | titlecase}}</p>
-                      <small class="product-category">Category: {{p.category}}</small>
-                      <p class="product-price"><span class="font-weight-bold text-danger">₵ {{p.price}} </span>  <del class="product-old-price text-dark-50"><small>₵{{ p.price +2}}</small></del></p>
+                    </div>
+                    <div class="card-body text-center">
+                      <h6>{{p.description.substr(0, 25)}} ....</h6>
+                      <p class="lead">{{p.price | currency: 'USD'}}</p>
+                    </div>
+                    <div class="row d-flex justify-content-center border-primary my-3">
+                      <div class="col-md-6">
+                        <button class="btn btn-outline-primary btn-small btn-block"
+                          [class.disabled]="p.quantity < 1"
+                          [class.btn-outline-danger]="p.quantity < 1"
+                        >
+                        {{ p.quantity < 1? "No Stock": "Add to Cart"}}
+                        </button>
+                      </div>
                     </div>
                   </div>
-								</div> -->
-                <div class="product">
+								</div>
+                <!-- <div class="product">
                   <div class="product-img">
                     <img src="/assets/img/products/{{p.image}}" alt="{{p.name}}" (click)="selectProduct(p.id)" style="cursor: pointer;">
-                    <!-- <div class="product-label">
-                      <span class="sale">-30%</span>
-                      <span class="new">NEW</span>
-                    </div> -->
                   </div>
                   <div class="product-body">
                     <p class="product-category">{{p.category}}</p>
                     <h3 class="product-name"><a href="#">{{p.name}}</a></h3>
-                    <h4 class="product-price">₵{{p.price}} <del class="product-old-price">₵{{p.price + 3.5}}</del></h4>
+                    <h4 class="product-price">{{p.price | currency: 'USD'}} <del class="product-old-price">{{(p.price + 3.5) | currency: 'USD'}}</del></h4>
                     <div class="product-btns">
                       <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
                       <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-                      <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
+                      <button class="quick-view" (click)="selectProduct(p.id)"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
                     </div>
                   </div>
                   <div class="add-to-cart">
                     <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
                   </div>
-                </div>
+                </div> -->
 							</div>
 						</div>
 					</div>

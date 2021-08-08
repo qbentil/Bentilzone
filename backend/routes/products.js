@@ -41,6 +41,7 @@ router.get('/', function(req, res){
     'c.title as category',
     'p.title as name',
     'p.price',
+    'p.description',
     'p.quantity',
     'p.image',
     'p.id'
@@ -79,7 +80,8 @@ router.get('/:proid', function(req, res){
     'c.title as category',
     'p.title as name',
     'p.price as price',
-    'p.quantity as stock',
+    'p.quantity',
+    'p.description',
     'p.image as image',
     'p.images as images',
     'p.id'
@@ -128,8 +130,9 @@ router.get('/category/:catName', function(req, res){
   .withFields ([
     'c.title as category',
     'p.title as name',
-    'p.price as price',
-    'p.quantity as stock',
+    'p.price',
+    'p.quantity ',
+    'p.description',
     'p.image as image',
     'p.id'
   ])

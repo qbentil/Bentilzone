@@ -20,4 +20,9 @@ export class ProductService {
       }
     });
   }
+  /* FETCDH SINGLE PRODUCTS FROM BACKEND */
+  getProduct(id : Number)
+  {
+    return this.http.get(this.SERVER_URL+"/products/"+id);
+  }
 }
