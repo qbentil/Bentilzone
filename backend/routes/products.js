@@ -17,7 +17,7 @@ router.get('/', function(req, res){
 
   
   let page = (req.query.page != undefined && req.query.page != 0) ? req.query.page: 1; // set current page number
-  const limit = (req.query.page != undefined && req.query.page != 0) ? req.query.limit: 10; // set limit of items per page
+  const limit = (req.query.limit != undefined && req.query.limit != 0) ? req.query.limit: 10; // set limit of items per page
 
   let startValue;
   let endValue;
