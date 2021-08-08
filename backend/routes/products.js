@@ -9,11 +9,11 @@ const {database} = require('../config/helpers')
 /* GET ALL PRODUCTS */
 router.get('/', function(req, res){
   
-  // res.setHeader("Access-Control-Allow-Origin", "*")
-  // res.setHeader("Access-Control-Allow-Credentials", "true");
-  // res.setHeader("Access-Control-Max-Age", "1800");
-  // res.setHeader("Access-Control-Allow-Headers", "content-type");
-  // res.setHeader( "Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, PATCH, OPTIONS" ); 
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:4200")
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Max-Age", "1800");
+  res.setHeader("Access-Control-Allow-Headers", "content-type");
+  res.setHeader( "Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, PATCH, OPTIONS" ); 
 
   
   let page = (req.query.page != undefined && req.query.page != 0) ? req.query.page: 1; // set current page number
@@ -38,8 +38,8 @@ router.get('/', function(req, res){
     on: 'c.id = p.cat_id'
   }])
   .withFields ([
-    'c.title as Category',
-    'p.title as Name',
+    'c.title as category',
+    'p.title as name',
     'p.price',
     'p.quantity',
     'p.image',
@@ -76,12 +76,12 @@ router.get('/:proid', function(req, res){
     on: 'c.id = p.cat_id'
   }])
   .withFields ([
-    'c.title as Category',
-    'p.title as Name',
-    'p.price as Price',
-    'p.quantity as Stock',
-    'p.image as Image',
-    'p.images as Images',
+    'c.title as category',
+    'p.title as name',
+    'p.price as price',
+    'p.quantity as stock',
+    'p.image as image',
+    'p.images as images',
     'p.id'
   ])
   .filter({'p.id' : productId})
@@ -126,11 +126,11 @@ router.get('/category/:catName', function(req, res){
     on: `c.id = p.cat_id WHERE c.title LIKE '%${category}%'`
   }])
   .withFields ([
-    'c.title as Category',
-    'p.title as Name',
-    'p.price as Price',
-    'p.quantity as Stock',
-    'p.image as Image',
+    'c.title as category',
+    'p.title as name',
+    'p.price as price',
+    'p.quantity as stock',
+    'p.image as image',
     'p.id'
   ])
   .slice(startValue, endValue)
