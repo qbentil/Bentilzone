@@ -79,11 +79,11 @@ router.get('/:proid', function(req, res){
   .withFields ([
     'c.title as category',
     'p.title as name',
-    'p.price as price',
+    'p.price',
     'p.quantity',
     'p.description',
-    'p.image as image',
-    'p.images as images',
+    'p.image',
+    'p.images',
     'p.id'
   ])
   .filter({'p.id' : productId})
