@@ -23,15 +23,16 @@ export class ProductService {
       }
     });
   }
+
   /* FETCH SINGLE PRODUCTS FROM BACKEND */
   getSingleProduct(id : Number) : Observable <ProductModuleServer>
   {
-
     return this.http.get<ProductModuleServer>(this.SERVER_URL+"/products/"+ id);
   }
+
   /* FETCH SINGLE PRODUCTS FROM BACKEND */
-  getProductFromOneCategory(id : Number) : Observable <ProductModuleServer>
+  getProductFromOneCategory(category: string) : Observable <ProductModuleServer>
   {
-    return this.http.get<ProductModuleServer>(this.SERVER_URL+"/products/"+ id);
+    return this.http.get<ProductModuleServer>(this.SERVER_URL+"/products/category/"+ category);
   }
 }
