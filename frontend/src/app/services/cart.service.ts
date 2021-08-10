@@ -80,13 +80,77 @@ export class CartService {
             this.cartDataClient.total = this.CartDataServer.totalAmount;
             localStorage.setItem('cart', JSON.stringify(this.CartDataServer))
           }
-          
+
           this.cartData$.next({...this.CartDataServer});
         })
       })
 
     }
 
+  }
+
+  // ADD PRODUCT TO CART
+  addProductToCart(id: number, qty: number)
+  {
+    this.productService.getSingleProduct(id).subscribe(prod => {
+          // 1ST CONDITION: If cart is empty
+          if(this.CartDataServer.data[0].product == undefined)
+          {
+            this.CartDataServer.data[0].product = prod;
+            this.CartDataServer.data[0].numInCart =  qty != undefined? qty: 1;
+            this.cartDataClient.prodData[0].incart = this.CartDataServer.data[0].numInCart;
+            this.cartDataClient.prodData[0].id = prod.id;
+            this.cartDataClient.total = this.CartDataServer.totalAmount;
+
+            // update local storage
+            localStorage.setItem('cart', JSON.stringify(this.cartDataClient))
+            this.cartData$.next({...this.CartDataServer});
+
+            // TODO: DISPLAY A TOAST NOTIFICATION
+
+          }else{
+                //2ND CONDITION: If the cart has something
+                let index = this.CartDataServer.data.find(p => p.product.id == prod.id) // response will be -1 or positive
+                  // a. If item is already in the cart => index is positive value
+                  if(index != -1 )
+                  {
+                    if(qty != undefined && qty <= prod.quantity)
+                    {
+                      this.CartDataServer.data[index].numInCart = this.CartDataServer.data[index].numInCart < prod.quantity? qty : prod.quantity;
+                    }else{
+                      this.CartDataServer.data[index].numInCart = this.CartDataServer.data[index].numInCart < prod.quantity?  this.CartDataServer.data[index].numInCart++ : prod.quantity;
+                    }
+                    this.cartDataClient.prodData[index].incart = this.CartDataServer.data[index].numInCart;
+                    // TODO: DISPLAY A TOAST NOTIFICATION
+
+                  }else{
+                    this.CartDataServer.data.push({
+                      numInCart: 1,
+                      product: prod
+                    })
+
+                    this.cartDataClient.prodData.push({
+                      incart: 1,
+                      id: prod.id
+                    })
+
+                    // TODO: DISPLAY A TOAST NOTIFICATION
+                    // TODO: CALCULATE TOTAL AMOUNT
+                    this.cartDataClient.total = this.CartDataServer.totalAmount;
+                    // update local storage
+                    localStorage.setItem('cart', JSON.stringify(this.cartDataClient))
+                    this.cartData$.next({...this.CartDataServer});
+                  } //END OF ELSE
+
+
+          }
+    })
+
+  }
+
+  updateCartItems(index: number, increase: boolean)
+  {
+    // let data = this
   }
 
 }
