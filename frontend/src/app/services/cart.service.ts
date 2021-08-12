@@ -253,10 +253,14 @@ export class CartService {
               const navigationExtras: NavigationExtras = {
                 state: {
                   message: data.message,
-                  // product
+                  products: prods,
+                  order_id: data.order_id,
+                  total: this.cartDataClient.total
                 }
               }
-            }
+              // TODO: HIDE SPINNER
+              this.router.navigate(['/thankyou'], navigationExtras);
+            };
           })
         })
       }
