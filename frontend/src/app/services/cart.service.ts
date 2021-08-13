@@ -259,7 +259,10 @@ export class CartService {
                 }
               }
               // TODO: HIDE SPINNER
-              this.router.navigate(['/thankyou'], navigationExtras);
+              this.router.navigate(['/thankyou'], navigationExtras).then(p => {
+                this.resetClientData();
+                this.cartTotal$.next(0);
+              });
             };
           })
         })
