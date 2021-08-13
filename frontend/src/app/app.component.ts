@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'Bentilzone Eccomerce';
-  name = 'Bentil Shadrack';
+  developer = 'Bentil Shadrack';
 }

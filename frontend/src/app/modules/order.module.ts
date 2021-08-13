@@ -3,7 +3,7 @@ export interface OrderRponse {
   success: boolean;
   message: string;
   products: [{
-    id: string,
-    numInCart: string
+    id: number,
+    numInCart: number
   }]
 }
