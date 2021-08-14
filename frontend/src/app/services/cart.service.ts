@@ -68,6 +68,7 @@ export class CartService {
             this.CartDataServer.data[0].product = actualProductInfo;
 
             // TODO: CREATE CALCULATE TOTAL FUNCTION HERE
+            this.calculateTotal();
             this.cartDataClient.total = this.CartDataServer.totalAmount;
             localStorage.setItem('cart', JSON.stringify(this.CartDataServer))
           }else{
@@ -98,20 +99,31 @@ export class CartService {
           if(this.CartDataServer.data[0].product == undefined)
           {
             this.CartDataServer.data[0].product = prod;
-            this.CartDataServer.data[0].numInCart =  qty != undefined? qty: 1;
+            this.CartDataServer.data[0].numInCart =  qty;
+            // this.CartDataServer.data[0].numInCart =  qty != undefined? qty: 1;
+            // TODO: CALCULATE TOTAL AMOUNT
+            this.calculateTotal();
+
+
             this.cartDataClient.prodData[0].incart = this.CartDataServer.data[0].numInCart;
             this.cartDataClient.prodData[0].id = prod.id;
             this.cartDataClient.total = this.CartDataServer.totalAmount;
 
             // update local storage
             localStorage.setItem('cart', JSON.stringify(this.cartDataClient))
-            this.cartData$.next({...this.CartDataServer});
+            this.cartData$.next({...this.CartDataServer}); // emitting new cart data.
 
             // TODO: DISPLAY A TOAST NOTIFICATION
 
           }else{
                 //2ND CONDITION: If the cart has something
-                let index = this.CartDataServer.data.find(p => p.product.id == prod.id) // response will be -1 or positive
+
+                let index = this.CartDataServer.data.findIndex(p => {
+                  if(p.product != undefined)
+                  {
+                    p.product.id == prod.id
+                  }
+                }) // response will be -1 or positive
                   // a. If item is already in the cart => index is positive value
                   if(index != -1 )
                   {
@@ -159,16 +171,20 @@ export class CartService {
 
     if(increase)
     {
-      data.numInCart < data.product.quantity? data.numInCart++ : data.product.quantity;
-      this.cartDataClient.prodData[index].incart = data.numInCart;
-      this.cartDataClient.total = this.CartDataServer.totalAmount;
-      //TODO: CALC TOTAL AMOUNT
-      this.calculateTotal();
+      if(data.product !=undefined)
+      {
+
+        data.numInCart < data.product.quantity? data.numInCart++ : data.product.quantity;
+        this.cartDataClient.prodData[index].incart = data.numInCart;
+        this.cartDataClient.total = this.CartDataServer.totalAmount;
+        //TODO: CALC TOTAL AMOUNT
+        this.calculateTotal();
 
 
-      // update local storage
-      localStorage.setItem('cart', JSON.stringify(this.cartDataClient))
-      this.cartData$.next({...this.CartDataServer});  // emitting the object.
+        // update local storage
+        localStorage.setItem('cart', JSON.stringify(this.cartDataClient))
+        this.cartData$.next({...this.CartDataServer});  // emitting the object.
+      }
     }else{
       data.numInCart--;
       if(data.numInCart < 1)
@@ -226,10 +242,13 @@ export class CartService {
   {
     let Total = 0;
     this.CartDataServer.data.forEach(p => {
-      const {numInCart} = p;
-      const {price} = p.product;
+      if(p.product != undefined)
+      {
+        const {numInCart} = p;
+        const {price} = p.product;
 
-      Total = numInCart * price;
+        Total = numInCart * price;
+      }
     })
 
     this.CartDataServer.totalAmount = Total;
@@ -245,7 +264,7 @@ export class CartService {
         this.http.post(`${this.server_url}/orders/new`, {
           userId: userid,
           products: this.cartDataClient.prodData
-        }).subscribe((data: OrderRponse) =>{
+        }).subscribe((data: any) =>{
           this.orderService.getSingleOrder(data.order_id).then(prods => {
 
             if(data.success)
