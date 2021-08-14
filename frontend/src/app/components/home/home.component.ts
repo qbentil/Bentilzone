@@ -32,7 +32,7 @@ export class HomeComponent implements OnInit {
 
   addToCart(id: number)
   {
-    this.cartService.addProductToCart(id);
+    this.cartService.addProductToCart(id, 1); // Set initial qty to 1 is not specified.
   }
 
 }
