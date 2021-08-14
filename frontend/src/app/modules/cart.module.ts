@@ -3,7 +3,7 @@ import { ProductModuleServer } from './product.module';
 export interface CartModuleServer {
   totalAmount: number;
   data: [{
-    product?: ProductModuleServer,
+    product: ProductModuleServer,
     numInCart: number
   }];
 }

@@ -16,7 +16,19 @@ import { environment } from '../../environments/environment';
 export class CartService {
   private server_url = environment.SERVER_URL;
 
+  // Create an undefined products
+  private pro: ProductModuleServer = {
+    id: 0,
+    name: '',
+    price: 0,
+    quantity: 0,
+    description: '',
+    images: ''
+  };
+
+  
   //Data Variable to store cart info on Localstorage
+
   private cartDataClient: CartModulePublic = {
     total: 0,
     prodData: [{
@@ -29,7 +41,7 @@ export class CartService {
   private CartDataServer : CartModuleServer = {
     totalAmount: 0,
     data: [{
-      product: undefined,
+      product: this.pro,
       numInCart: 0,
     }]
   };
@@ -117,13 +129,7 @@ export class CartService {
 
           }else{
                 //2ND CONDITION: If the cart has something
-
-                let index = this.CartDataServer.data.findIndex(p => {
-                  if(p.product != undefined)
-                  {
-                    p.product.id == prod.id
-                  }
-                }) // response will be -1 or positive
+                let index = this.CartDataServer.data.findIndex(p => p.product.id == prod.id) // response will be -1 or positive
                   // a. If item is already in the cart => index is positive value
                   if(index != -1 )
                   {
@@ -171,20 +177,16 @@ export class CartService {
 
     if(increase)
     {
-      if(data.product !=undefined)
-      {
-
-        data.numInCart < data.product.quantity? data.numInCart++ : data.product.quantity;
-        this.cartDataClient.prodData[index].incart = data.numInCart;
-        this.cartDataClient.total = this.CartDataServer.totalAmount;
-        //TODO: CALC TOTAL AMOUNT
-        this.calculateTotal();
+      data.numInCart < data.product.quantity? data.numInCart++ : data.product.quantity;
+      this.cartDataClient.prodData[index].incart = data.numInCart;
+      this.cartDataClient.total = this.CartDataServer.totalAmount;
+      //TODO: CALC TOTAL AMOUNT
+      this.calculateTotal();
 
 
-        // update local storage
-        localStorage.setItem('cart', JSON.stringify(this.cartDataClient))
-        this.cartData$.next({...this.CartDataServer});  // emitting the object.
-      }
+      // update local storage
+      localStorage.setItem('cart', JSON.stringify(this.cartDataClient))
+      this.cartData$.next({...this.CartDataServer});  // emitting the object.
     }else{
       data.numInCart--;
       if(data.numInCart < 1)
@@ -242,13 +244,10 @@ export class CartService {
   {
     let Total = 0;
     this.CartDataServer.data.forEach(p => {
-      if(p.product != undefined)
-      {
-        const {numInCart} = p;
-        const {price} = p.product;
+      const {numInCart} = p;
+      const {price} = p.product;
 
-        Total = numInCart * price;
-      }
+      Total = numInCart * price;
     })
 
     this.CartDataServer.totalAmount = Total;
@@ -294,7 +293,7 @@ export class CartService {
     this.CartDataServer = {
       totalAmount: 0,
       data: [{
-          product: undefined,
+          product: this.pro,
           numInCart: 0
       }]
     };
