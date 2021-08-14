@@ -26,7 +26,7 @@ export class CartService {
     images: ''
   };
 
-  
+
   //Data Variable to store cart info on Localstorage
 
   private cartDataClient: CartModulePublic = {
@@ -63,42 +63,49 @@ export class CartService {
 
     // Get information form Local storage if any
     let info = JSON.parse(localStorage.getItem('cart') || '{}');
+    // let check50 = info.length != undefined? 'Some': "none";
+    // console.log(check50);
 
-    if(info != undefined && info != null && info.prodData[0].incart != 0)
+    // console.log(info);
+
+    if(info.length != undefined)
     {
-      // localStorage is not empty
-      this.cartDataClient = info;
+      if(info != undefined && info != null && info.prodData[0].incart != 0)
+      {
+        // localStorage is not empty
+        this.cartDataClient = info;
 
-      // Loop through each entry and put in CartDataServer object
+        // Loop through each entry and put in CartDataServer object
 
-      this.cartDataClient.prodData.forEach(p => {
-        this.productService.getSingleProduct(p.id).subscribe((actualProductInfo: ProductModuleServer) =>{
-          if(this.CartDataServer.data[0].numInCart == 0)
-          {
-            // CartDataServer is empty
-            this.CartDataServer.data[0].numInCart = p.incart;
-            this.CartDataServer.data[0].product = actualProductInfo;
+        this.cartDataClient.prodData.forEach(p => {
+          this.productService.getSingleProduct(p.id).subscribe((actualProductInfo: ProductModuleServer) =>{
+            if(this.CartDataServer.data[0].numInCart == 0)
+            {
+              // CartDataServer is empty
+              this.CartDataServer.data[0].numInCart = p.incart;
+              this.CartDataServer.data[0].product = actualProductInfo;
 
-            // TODO: CREATE CALCULATE TOTAL FUNCTION HERE
-            this.calculateTotal();
-            this.cartDataClient.total = this.CartDataServer.totalAmount;
-            localStorage.setItem('cart', JSON.stringify(this.CartDataServer))
-          }else{
-            // Cart data server has something in it
-            this.CartDataServer.data.push({
-              numInCart: p.incart,
-              product: actualProductInfo
-            });
-            // TODO: CREATE CALCULATE TOTAL FUNCTION HERE
+              // TODO: CREATE CALCULATE TOTAL FUNCTION HERE
+              this.calculateTotal();
+              this.cartDataClient.total = this.CartDataServer.totalAmount;
+              localStorage.setItem('cart', JSON.stringify(this.CartDataServer))
+            }else{
+              // Cart data server has something in it
+              this.CartDataServer.data.push({
+                numInCart: p.incart,
+                product: actualProductInfo
+              });
+              // TODO: CREATE CALCULATE TOTAL FUNCTION HERE
 
-            this.cartDataClient.total = this.CartDataServer.totalAmount;
-            localStorage.setItem('cart', JSON.stringify(this.CartDataServer))
-          }
+              this.cartDataClient.total = this.CartDataServer.totalAmount;
+              localStorage.setItem('cart', JSON.stringify(this.CartDataServer))
+            }
 
-          this.cartData$.next({...this.CartDataServer});
+            this.cartData$.next({...this.CartDataServer});
+          })
         })
-      })
 
+      }
     }
 
   }
