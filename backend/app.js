@@ -7,7 +7,7 @@ const logger = require('morgan');
 // Custom Dependencise
 const cors = require('cors');
 const corsOptions ={
-    origin: 'http://localhost:4200', 
+    origin: '*', 
     credentials: true,            //access-control-allow-credentials:true
     methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH'],
     allowedHeaders: 'Content-Type, Authorization, Origin, X-Requested-with, Accept',

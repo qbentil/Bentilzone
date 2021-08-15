@@ -9,11 +9,7 @@ const {database} = require('../config/helpers')
 /* GET ALL PRODUCTS */
 router.get('/', function(req, res){
   
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:4200")
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Max-Age", "1800");
-  res.setHeader("Access-Control-Allow-Headers", "content-type");
-  res.setHeader( "Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, PATCH, OPTIONS" ); 
+  includes(res); //INCLUDE CORS Headers
 
   
   let page = (req.query.page != undefined && req.query.page != 0) ? req.query.page: 1; // set current page number
@@ -68,7 +64,7 @@ router.get('/', function(req, res){
 /* GET SINGLE PRODUCT */
 router.get('/:proid', function(req, res){
 
-  
+  includes(res); //INCLUDE CORS Headers
   let productId = req.params.proid; // get product id from params
   
   database.table('products as p')
@@ -103,6 +99,7 @@ router.get('/:proid', function(req, res){
 
 /* GET ALL PRODUCTS IN A PARTICULAR CATEGORY */
 router.get('/category/:catName', function(req, res){
+  includes(res); //INCLUDE CORS Headers
   
   const category = req.params.catName;  //Get category name from params
   
@@ -154,6 +151,14 @@ router.get('/category/:catName', function(req, res){
   
 });
 
-
-
 module.exports = router;
+
+
+function includes(res)
+{
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:4200")
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Max-Age", "1800");
+  res.setHeader("Access-Control-Allow-Headers", "content-type, Authorization, Origin, X-Requested-with, Accept");
+  res.setHeader( "Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, PATCH, OPTIONS" );  
+}
