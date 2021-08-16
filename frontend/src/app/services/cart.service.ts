@@ -4,6 +4,7 @@ import { NavigationExtras, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { OrderRponse } from './../modules/order.module';
 import { OrderService } from './order.service';
 import { ProductModuleServer } from './../modules/product.module';
@@ -58,7 +59,8 @@ export class CartService {
               private productService:ProductService,
               private orderService: OrderService,
               private router: Router,
-              private toast: ToastrService) {
+              private toast: ToastrService,
+              private spinner: NgxSpinnerService) {
 
     this.cartTotal$.next(this.CartDataServer.totalAmount);
     this.cartData$.next(this.CartDataServer);
@@ -66,12 +68,11 @@ export class CartService {
     // Get information form Local storage if any
     let info = JSON.parse(localStorage.getItem('cart') || '{}');
     // let check50 = info.length != undefined? 'Some': "none";
-    // console.log(check50);
-
     // console.log(info);
 
-    if(info.length == undefined)
+    if(info.length !== undefined)
     {
+
       if(info != undefined && info != null && info.prodData[0].incart != 0)
       {
         // localStorage is not empty
@@ -117,15 +118,20 @@ export class CartService {
   {
     this.productService.getSingleProduct(id).subscribe(prod => {
           // 1ST CONDITION: If cart is empty
-          console.log(this.CartDataServer.data[0].product);
+          console.log(prod);
+          // console.log(this.CartDataServer.data[0]);
 
-          if(this.CartDataServer.data[0].product == undefined)
+          if(this.CartDataServer.data[0].product.id == 0)
           {
+            console.log(this.CartDataServer.data[0]);
+            // return;
             this.CartDataServer.data[0].product = prod;
+            console.log(this.CartDataServer.data[0])
             this.CartDataServer.data[0].numInCart =  qty;
             // this.CartDataServer.data[0].numInCart =  qty != undefined? qty: 1;
             // TODO: CALCULATE TOTAL AMOUNT
             this.calculateTotal();
+
 
 
             this.cartDataClient.prodData[0].incart = this.CartDataServer.data[0].numInCart;
@@ -158,7 +164,7 @@ export class CartService {
                     }
                     this.cartDataClient.prodData[index].incart = this.CartDataServer.data[index].numInCart;
 
-                    
+
                     //  DISPLAY A TOAST NOTIFICATION
                     this.toast.success(`${prod.name} quantity updated in the cart`, 'Cart Product Updated', {
                       timeOut: 1500,
@@ -275,13 +281,15 @@ export class CartService {
   private calculateTotal()
   {
     let Total = 0;
+    // return this.CartDataServer.data
     this.CartDataServer.data.forEach(p => {
+
       const {numInCart} = p;
       const {price} = p.product;
 
       Total = numInCart * price;
     })
-
+    console.log(Total);
     this.CartDataServer.totalAmount = Total;
     this.cartTotal$.next(this.CartDataServer.totalAmount);
   }
@@ -308,12 +316,22 @@ export class CartService {
                   total: this.cartDataClient.total
                 }
               }
-              // TODO: HIDE SPINNER
+              this.spinner.hide().then() ; // HIDE SPINNER
               this.router.navigate(['/thankyou'], navigationExtras).then(p => {
                 this.resetClientData();
                 this.cartTotal$.next(0);
               });
-            };
+            }else{
+              this.spinner.hide().then(); //HIDE SPINNER
+              this.router.navigateByUrl('/checkout').then();
+              // DISPLAY A TOAST NOTIFICATION
+              this.toast.error(`Sorry! Failed to make order`, 'Order Status', {
+                timeOut: 1500,
+                progressBar: true,
+                progressAnimation: 'increasing',
+                positionClass: 'toast-top-right'
+              })
+            }
           })
         })
       }

@@ -92,12 +92,13 @@
                       <h6>{{p.description.substr(0, 25)}} ....</h6>
                       <p class="lead">{{p.price | currency: 'USD'}}</p>
                     </div>
-                    <div class="row d-flex justify-content-center border-primary my-3">
+                    <div class="row d-flex justify-content-center border-primary my-2">
                       <div class="col-md-6">
                         <button class="btn btn-outline-primary btn-small btn-block"
                           [class.disabled]="p.quantity < 1"
                           [class.btn-outline-danger]="p.quantity < 1"
                           (click)="addToCart(p.id)"
+                          
                         >
                         {{ p.quantity < 1? "No Stock": "Add to Cart"}}
                         </button>
