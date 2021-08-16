@@ -87,7 +87,7 @@ router.get('/:proid', function(req, res){
   .then(prod =>{
     if(prod)
     {
-      res.status(200).json({prod})
+      res.status(200).json(prod)
     }else{
       res.status(404).json({message: `No record found for product with ID ${productId}.`});
     }
