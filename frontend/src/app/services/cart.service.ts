@@ -67,8 +67,6 @@ export class CartService {
 
     // Get information form Local storage if any
     let info = JSON.parse(localStorage.getItem('cart') || '{}');
-    // let check50 = info.length != undefined? 'Some': "none";
-    // console.log(info);
 
     if(info.length !== undefined)
     {
@@ -118,15 +116,11 @@ export class CartService {
   {
     this.productService.getSingleProduct(id).subscribe(prod => {
           // 1ST CONDITION: If cart is empty
-          console.log(prod);
-          // console.log(this.CartDataServer.data[0]);
 
           if(this.CartDataServer.data[0].product.id == 0)
           {
-            console.log(this.CartDataServer.data[0]);
-            // return;
+
             this.CartDataServer.data[0].product = prod;
-            console.log(this.CartDataServer.data[0])
             this.CartDataServer.data[0].numInCart =  qty;
             // this.CartDataServer.data[0].numInCart =  qty != undefined? qty: 1;
             // TODO: CALCULATE TOTAL AMOUNT
@@ -156,15 +150,11 @@ export class CartService {
                   // a. If item is already in the cart => index is positive value
                   if(index != -1 )
                   {
-                    if(qty != undefined && qty <= prod.quantity)
-                    {
-                      this.CartDataServer.data[index].numInCart = this.CartDataServer.data[index].numInCart < prod.quantity? qty : prod.quantity;
-                    }else{
-                      this.CartDataServer.data[index].numInCart = this.CartDataServer.data[index].numInCart < prod.quantity?  this.CartDataServer.data[index].numInCart++ : prod.quantity;
-                    }
+                    this.CartDataServer.data[index].numInCart = (this.CartDataServer.data[index].numInCart+qty) <= prod.quantity? this.CartDataServer.data[index].numInCart+qty : prod.quantity;
                     this.cartDataClient.prodData[index].incart = this.CartDataServer.data[index].numInCart;
 
-
+                    // TODO: CALCULATE TOTAL AMOUNT
+                    this.calculateTotal();
                     //  DISPLAY A TOAST NOTIFICATION
                     this.toast.success(`${prod.name} quantity updated in the cart`, 'Cart Product Updated', {
                       timeOut: 1500,
@@ -172,6 +162,12 @@ export class CartService {
                       progressAnimation: 'increasing',
                       positionClass: 'toast-top-right'
                     })
+
+                    this.cartDataClient.total = this.CartDataServer.totalAmount;
+                    // update local storage
+                    localStorage.setItem('cart', JSON.stringify(this.cartDataClient))
+                    this.cartData$.next({...this.CartDataServer});
+
 
                   }else{
                     this.CartDataServer.data.push({
@@ -287,9 +283,8 @@ export class CartService {
       const {numInCart} = p;
       const {price} = p.product;
 
-      Total = numInCart * price;
+      Total += numInCart * price;
     })
-    console.log(Total);
     this.CartDataServer.totalAmount = Total;
     this.cartTotal$.next(this.CartDataServer.totalAmount);
   }
