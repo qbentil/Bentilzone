@@ -156,7 +156,7 @@ export class CartService {
                     // TODO: CALCULATE TOTAL AMOUNT
                     this.calculateTotal();
                     //  DISPLAY A TOAST NOTIFICATION
-                    this.toast.success(`${prod.name} quantity updated in the cart`, 'Cart Product Updated', {
+                    this.toast.info(`${prod.name} quantity updated in the cart`, 'Cart Product Updated', {
                       timeOut: 1500,
                       progressBar: true,
                       progressAnimation: 'increasing',
