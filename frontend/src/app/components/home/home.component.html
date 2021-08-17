@@ -98,9 +98,9 @@
                           [class.disabled]="p.quantity < 1"
                           [class.btn-outline-danger]="p.quantity < 1"
                           (click)="addToCart(p.id)"
-                          
+
                         >
-                        {{ p.quantity < 1? "No Stock": "Add to Cart"}}
+                        {{ p.quantity < 1? "Out of Stock": "Add to Cart"}}
                         </button>
                       </div>
                     </div>
@@ -121,7 +121,12 @@
                     </div>
                   </div>
                   <div class="add-to-cart">
-                    <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+                    <button class="add-to-cart-btn"
+                    [class.disabled]="p.quantity < 1"
+                    [class.btn-outline-danger]="p.quantity < 1"
+                    (click)="addToCart(p.id)"
+
+                    ><i class="fa fa-shopping-cart"></i>  {{ p.quantity < 1? "Out of Stock": "Add to Cart"}}</button>
                   </div>
                 </div> -->
 							</div>

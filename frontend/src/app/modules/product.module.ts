@@ -5,6 +5,7 @@ export interface ProductModuleServer {
   quantity: number;
   description: string;
   images: string;
+  image: string;
 }
 
 export interface ServerResponse{
