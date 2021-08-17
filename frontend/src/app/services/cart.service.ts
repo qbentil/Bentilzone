@@ -5,7 +5,6 @@ import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { OrderRponse } from './../modules/order.module';
 import { OrderService } from './order.service';
 import { ProductModuleServer } from './../modules/product.module';
 import { ProductService } from './product.service';
@@ -25,7 +24,8 @@ export class CartService {
     price: 0,
     quantity: 0,
     description: '',
-    images: ''
+    images: '',
+    image: '',
   };
 
 
@@ -66,28 +66,37 @@ export class CartService {
     this.cartData$.next(this.CartDataServer);
 
     // Get information form Local storage if any
-    let info = JSON.parse(localStorage.getItem('cart') || '{}');
+    let dummy = {
+      total: 0,
+      prodData: [{
+        id: 0,
+        incart: 0
+      }]
+    }
+    let info:CartModulePublic = JSON.parse(localStorage.getItem('cart') || '{}');
 
-    if(info.length !== undefined)
+
+    if(info.total !== undefined)
     {
-
       if(info != undefined && info != null && info.prodData[0].incart != 0)
       {
         // localStorage is not empty
         this.cartDataClient = info;
 
         // Loop through each entry and put in CartDataServer object
-
         this.cartDataClient.prodData.forEach(p => {
+
           this.productService.getSingleProduct(p.id).subscribe((actualProductInfo: ProductModuleServer) =>{
             if(this.CartDataServer.data[0].numInCart == 0)
             {
               // CartDataServer is empty
+
               this.CartDataServer.data[0].numInCart = p.incart;
               this.CartDataServer.data[0].product = actualProductInfo;
 
               // TODO: CREATE CALCULATE TOTAL FUNCTION HERE
               this.calculateTotal();
+
               this.cartDataClient.total = this.CartDataServer.totalAmount;
               localStorage.setItem('cart', JSON.stringify(this.CartDataServer))
             }else{
@@ -97,7 +106,7 @@ export class CartService {
                 product: actualProductInfo
               });
               // TODO: CREATE CALCULATE TOTAL FUNCTION HERE
-
+              this.calculateTotal();
               this.cartDataClient.total = this.CartDataServer.totalAmount;
               localStorage.setItem('cart', JSON.stringify(this.CartDataServer))
             }
@@ -105,7 +114,6 @@ export class CartService {
             this.cartData$.next({...this.CartDataServer});
           })
         })
-
       }
     }
 
@@ -279,7 +287,6 @@ export class CartService {
     let Total = 0;
     // return this.CartDataServer.data
     this.CartDataServer.data.forEach(p => {
-
       const {numInCart} = p;
       const {price} = p.product;
 
@@ -288,6 +295,15 @@ export class CartService {
     this.CartDataServer.totalAmount = Total;
     this.cartTotal$.next(this.CartDataServer.totalAmount);
   }
+
+  calculateSubtotal(index: number)
+  {
+    let subTotal = 0;
+    const p = this.CartDataServer.data[index];
+    subTotal = p.product.price * p.numInCart;
+    return subTotal;
+  }
+
 
   checkOutFromCart(userid: number)
   {
