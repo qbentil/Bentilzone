@@ -1,6 +1,6 @@
+import { CartModulePublic, CartModuleServer } from './../../modules/cart.module';
 import { Component, OnInit } from '@angular/core';
 
-import { CartModuleServer } from './../../modules/cart.module';
 import { CartService } from './../../services/cart.service';
 import { ProductModuleServer } from 'src/app/modules/product.module';
 
@@ -21,6 +21,7 @@ export class CartComponent implements OnInit {
         images: '',
         image: ''
       };
+      // info:CartModulePublic = JSON.parse(localStorage.getItem('cart') || '{}');
 
       cartData : CartModuleServer = {
         totalAmount: 0,
