@@ -113,7 +113,8 @@ router.get('/:oid', function(req, res){
 router.post("/new", (req, res) =>{
   
   // CCORS
-  includes(res);
+  includes(res)
+  includes(req)
   
   let {userid, products} = req.body;
 
@@ -189,9 +190,7 @@ router.post("/new", (req, res) =>{
 
 /* FAKE PAYMENT GATEWAY CALL */
 router.post('/payment', (req, res) => {
-  // CORS
   includes(res)
-  
   setTimeout( () => {
     res.status(200).json({success: true});
   }, 3000)
@@ -205,9 +204,10 @@ module.exports = router;
 // Cors Bug Fix
 function includes(res)
 {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:4200")
+  res.setHeader("Access-Control-Allow-Origin", "*")
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader("Access-Control-Max-Age", "1800");
+  // res.setHeader("Access-Control-Preflight-Continue", false);
   res.setHeader("Access-Control-Allow-Headers", "content-type, Authorization, Origin, X-Requested-with, Accept");
   res.setHeader( "Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, PATCH, OPTIONS" );  
 }
