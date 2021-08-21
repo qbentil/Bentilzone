@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 // Database
-const {database} = require('../config/helpers')
+const {database} = require('../config/helpers');
 
 /* GET ALL ORDERS */
 router.get('/', function(req, res){
@@ -113,12 +113,9 @@ router.get('/:oid', function(req, res){
 router.post("/new", (req, res) =>{
   
   // CCORS
-  // includes(res)
   includes(req)
   
   let {userid, products} = req.body;
-
-  // console.log(userid, products);
 
   if(userid != 0 && userid > 0 && !isNaN(userid))
   {
@@ -190,7 +187,7 @@ router.post("/new", (req, res) =>{
 
 /* FAKE PAYMENT GATEWAY CALL */
 router.post('/payment', (req, res) => {
-  includes(res)
+  // includes(res) {Uses Request}
   includes(req)
   setTimeout( () => {
     res.status(200).json({success: true});
@@ -203,12 +200,13 @@ module.exports = router;
 
 
 // Cors Bug Fix
+
 function includes(res)
 {
   res.setHeader("Access-Control-Allow-Origin", "*")
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader("Access-Control-Max-Age", "1800");
-  res.setHeader("Access-Control-Preflight-Continue", false);
+  res.setHeader("Access-Control-Preflight-Continue", false); //Preflight-Continue
   res.setHeader("Access-Control-Allow-Headers", "content-type, Authorization, Origin, X-Requested-with, Accept");
   res.setHeader( "Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, PATCH, OPTIONS" );  
 }
