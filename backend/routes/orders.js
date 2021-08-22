@@ -113,11 +113,12 @@ router.get('/:oid', function(req, res){
 router.post("/new", (req, res) =>{
   
   // CCORS
+  // includes(res)
   includes(req)
   
   let {userid, products} = req.body;
 
-  if(userid != 0 && userid > 0 && !isNaN(userid))
+  if(userid != null && userid != 0 && userid > 0 && !isNaN(userid))
   {
     database.table('orders')
     .insert({
@@ -152,7 +153,7 @@ router.post("/new", (req, res) =>{
           .insert({
             order_id: newOrderId,
             product_id: p.id,
-            quatity: inCart
+            quantity: inCart
           }).then(newId =>{
             
             // UPDATE PRODUCT QUANTITY
@@ -162,12 +163,15 @@ router.post("/new", (req, res) =>{
               quatity: data.quantity
             }).then(successNum =>{}).catch(err => console.log(err))
             
-          }).catch(err => console.log(err))
+          }).catch(err => console.log(err));
           
         });
+        
       }else{
-        res.json({message: 'New order failded by adding order datails'})
+        res.json({message: 'New order failded by adding order datails', success: false})
       }
+
+
 
       res.status(200).json({
         message: `Order successful with order ID: ${newOrderId}`,
@@ -178,17 +182,20 @@ router.post("/new", (req, res) =>{
       
     }).catch(err => console.log(err))
   }
-  res.status(424).json({
-    message: `Order Failed`,
-    success: false
-  });
+  else{
+    res.status(424).json({
+      message: `Order Failed`,
+      success: false
+    });
+  }
   
 })
 
 /* FAKE PAYMENT GATEWAY CALL */
 router.post('/payment', (req, res) => {
-  // includes(res) {Uses Request}
+  includes(res) //{Uses Request}
   includes(req)
+  
   setTimeout( () => {
     res.status(200).json({success: true});
   }, 3000)
